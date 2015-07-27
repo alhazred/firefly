@@ -1,0 +1,275 @@
+<?xml version='1.0'?>  
+<!--
+  CDDL HEADER START
+ 
+  The contents of this file are subject to the terms of the
+  Common Development and Distribution License (the "License").
+  You may not use this file except in compliance with the License.
+ 
+  You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+  or http://www.opensolaris.org/os/licensing.
+  See the License for the specific language governing permissions
+  and limitations under the License.
+ 
+  When distributing Covered Code, include this CDDL HEADER in each
+  file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+  If applicable, add the following below this CDDL HEADER, with the
+  fields enclosed by brackets "[]" replaced with your own identifying
+  information: Portions Copyright [yyyy] [name of copyright owner]
+ 
+  CDDL HEADER END
+ 
+  Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
+
+  XML specification for building an NexentaOS installer iso image
+-->
+<software_data action="install">
+  <name>sbin</name>
+  <name>usr/bin/bash</name>
+  <name>usr/bin/ckitem</name>
+  <name>usr/bin/logname</name>
+  <name>usr/bin/nawk</name>
+  <name>usr/bin/mkdir</name>
+  <name>usr/bin/loadkeys</name>
+  <name>usr/bin/cp</name>
+  <name>usr/bin/head</name>
+  <name>usr/bin/sort</name>
+  <name>usr/bin/svcs</name>
+  <name>usr/bin/amd64/sort</name>
+  <name>usr/bin/amd64/truss</name> 
+  <name>usr/bin/i386/wget</name>
+  <name>usr/bin/pkill</name>
+  <name>usr/bin/mkfifo</name>
+  <name>usr/bin/egrep</name>
+  <name>usr/bin/pgrep</name>
+  <name>usr/sbin/autopush</name>
+  <name>usr/sbin/beadm</name>
+  <name>usr/sbin/pmadm</name>
+  <name>sbin/biosdev</name>
+  <name>usr/sbin/bootadm</name>
+  <name>usr/sbin/cryptoadm</name>
+  <name>sbin/dhcpagent</name>
+  <name>sbin/dhcpinfo</name>
+  <name>usr/sbin/dladm</name>
+  <name>sbin/dlmgmtd</name>
+  <name>usr/sbin/dlstat</name>
+  <name>usr/sbin/fdisk</name>
+  <name>usr/sbin/fiocompress</name>
+  <name>usr/sbin/flowadm</name>
+  <name>usr/sbin/flowstat</name>
+  <name>usr/sbin/hostconfig</name>
+  <name>usr/sbin/ifconfig</name>
+  <name>sbin/ifparse</name>
+  <name>usr/sbin/init</name>
+  <name>sbin/in.mpathd</name>
+  <name>usr/sbin/installgrub</name>
+  <name>usr/sbin/ipadm</name>
+  <name>usr/sbin/ipmpstat</name>
+  <name>usr/bin/jsh</name>
+  <name>usr/sbin/mount</name>
+  <name>usr/sbin/mountall</name>
+  <name>usr/sbin/mount_media</name>
+  <name>sbin/netstrategy</name>
+  <!-- <name>usr/sbin/netcfg</name> 
+  <name>usr/sbin/netadm</name> -->
+  <name>usr/bin/pfsh</name>
+  <name>sbin/rc0</name>
+  <name>sbin/rc1</name>
+  <name>sbin/rc2</name>
+  <name>sbin/rc3</name>
+  <name>sbin/rc5</name>
+  <name>sbin/rc6</name>
+  <name>sbin/rcS</name>
+  <name>usr/sbin/route</name>
+  <name>usr/sbin/routeadm</name>
+  <name>sbin/soconfig</name>
+  <name>sbin/sh</name>
+  <name>sbin/su</name>
+  <name>sbin/sulogin</name>
+  <name>sbin/swapadd</name>
+  <name>usr/sbin/sync</name>
+  <name>usr/sbin/tzreload</name>
+  <name>usr/sbin/uadmin</name>
+  <name>usr/sbin/umount</name>
+  <name>usr/sbin/umountall</name>
+  <name>usr/bin/uname</name>
+  <name>usr/sbin/wusbadm</name>
+  <name>usr/sbin/zfs</name>
+  <name>usr/bin/zonename</name>
+  <name>usr/sbin/zpool</name>
+  <name>usr/sbin/svcadm</name>
+  <name>usr/sbin/svccfg</name>
+  <name>usr/sbin/prtconf</name>
+  <name>usr/sbin/amd64/prtconf</name>
+
+  <name>usr/bin/sh</name>
+  <name>usr/bin/hostname</name>
+  <name>usr/sbin/ipsecalgs</name>
+  <name>usr/sbin/fcadm</name>
+  <name>usr/lib/sysevent/syseventd</name>
+  <name>usr/lib/libgcc_s.so.1</name>
+  <name>usr/lib/libxml2.so</name>
+  <name>usr/lib/libxml2.so.2</name>
+  <name>usr/lib/libxml2.so.2.9.1</name>
+  <name>usr/lib/libz.so.1.2.8</name>
+  <name>usr/lib/libipsecutil.so.1</name>
+  <name>usr/lib/libHBAAPI.so.1</name>
+  <name>usr/lib/libfcoe.so.1</name>
+<name>usr/lib/amd64/libsaveargs.so.1</name>
+  <name>usr/lib/libsmbios.so.1</name>
+  <name>usr/lib/libtecla.so.1</name>
+  <name>usr/lib/libl.so.1</name>
+  <name>usr/lib/libexacct.so.1</name>
+  <name>usr/lib/libpool.so.1</name>
+  <name>usr/lib/libidmap.so.1</name>
+  <name>usr/lib/libldap.so.5</name>
+  <name>usr/lib/libsldap.so.1</name>
+  <name>usr/lib/libadutils.so.1</name>
+  <name>usr/lib/libsasl.so.1</name>
+  <name>usr/lib/mps/libnspr4.so</name>
+  <name>usr/lib/mps/libplc4.so</name>
+  <name>usr/lib/mps/libnss3.so</name>
+  <name>usr/lib/mps/libssl3.so</name>
+  <name>usr/lib/mps/libnssutil3.so</name>
+  <name>usr/lib/mps/libplds4.so</name>
+  <name>usr/sbin/lofiadm</name>
+  <name>usr/sbin/devfsadm</name>
+  <name>usr/sbin/modload</name>
+  <name>usr/sbin/amd64/modload</name>
+  <name>usr/sbin/mount</name>
+  <name>usr/sbin/hostconfig</name>
+  <name>usr/sbin/chroot</name>
+  <name>usr/sbin/syslogd</name>
+  <name>usr/sbin/df</name>
+  <name>usr/bin/coreadm</name>
+  <name>usr/bin/bash</name>
+  <name>usr/bin/ksh</name>
+  <name>usr/bin/cut</name>
+  <name>usr/bin/sed</name>
+  <name>usr/bin/more</name>
+  <name>usr/bin/cat</name>
+  <name>usr/bin/echo</name>
+  <name>usr/bin/false</name>
+  <name>usr/bin/grep</name>
+  <name>usr/bin/ls</name>
+  <name>usr/bin/rm</name>
+  <name>usr/bin/svcprop</name>
+  <name>usr/bin/true</name>
+  <name>usr/bin/cd</name>
+  <name>usr/bin/test</name>
+  <name>usr/bin/sleep</name>
+  <name>usr/bin/expr</name>
+  <name>usr/bin/vi</name>
+  <name>usr/bin/wget</name>
+  <name>usr/lib/fs/hsfs/fstyp</name>
+  <name>usr/lib/fs/hsfs/fstyp.so.1</name>
+  <name>usr/lib/fs/hsfs/mount</name>
+  <name>usr/lib/fs/tmpfs/mount</name>
+  <name>usr/lib/fs/ufs/fstyp</name>
+  <name>usr/lib/fs/ufs/fstyp.so.1</name>
+  <name>usr/lib/fs/ufs/mount</name>
+  <name>usr/lib/libfstyp.so.1</name>
+  <name>usr/lib/platexec</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_cfg_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_disk_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_fssnap_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_ieee1394_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_lofi_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_misc_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_misc_link_i386.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_port_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_ramdisk_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_sgen_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_tape_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_usb_link.so</name>
+  <name>usr/lib/devfsadm/linkmod/SUNW_zfs_link.so</name>
+  <name>usr/lib/devfsadm/devfsadmd</name>
+  <name>usr/lib/iconv/alias</name>
+  <name>usr/lib/iconv/646%UTF-8.so</name>
+  <name>usr/lib/iconv/UTF-8%646.so</name>
+  <name>usr/lib/libm.so.2</name>
+  <name>usr/lib/libm.so</name>
+  <name>usr/lib/libfstyp.so</name>
+  <name>usr/lib/libz.so</name>
+  <name>usr/lib/libz.so.1</name>
+  <name>usr/bin/i86/ksh</name>
+  <name>usr/bin/i86/ksh93</name>
+  <name>usr/lib/isaexec</name>
+  <name>usr/lib/libast.so.1</name>
+  <name>usr/lib/libcmd.so.1</name>
+  <name>usr/lib/libdll.so.1</name>
+  <name>usr/lib/libshell.so.1</name>
+  <name>usr/lib/libcrypt.so.1</name>
+  <name>usr/lib/inet/wanboot/netbootinfo</name>
+  <!-- Libraries needed for netbootinfo library -->
+  <name>usr/lib/libwanbootutil.so.1</name>
+  <name>usr/lib/libwanboot.so.1</name>
+  <name>usr/lib/libidn.so.11</name>
+  <name>usr/lib/libidn.so.11.6.13</name>
+  <name>usr/lib/libmapmalloc.so.1</name>
+  <name>usr/lib/libcrypto.so.1.0.0</name>
+  <name>usr/lib/libssl.so.1.0.0</name>
+  <name>usr/share/lib/xml/dtd/service_bundle.dtd.1</name>
+  <name>usr/share/lib/termcap</name>
+  <name>var/sadm/install/admin/default</name>
+  <name>var/sadm/system/admin/default_java</name>
+  <name>var/sadm/install/contents</name>
+  <name>var/adm/utmpx</name>
+  <name>var/adm/wtmpx</name>
+  <name>var/adm/aculog</name>
+  <name>var/log/authlog</name>
+  <name>var/log/syslog</name>
+  <name>var/run</name>
+  <name>var/spool/cron/crontabs/adm</name>
+  <name>var/spool/cron/crontabs/root</name>
+  <name>var/yp/aliases</name>
+  <name>var/yp/nicknames</name>
+  <!-- Libraries, plugins and topo maps needed for /usr/sbin/dlmgmtd -->
+  <name>usr/lib/fm/libtopo.so.1</name>
+  <name>usr/lib/fm/amd64/libtopo.so.1</name>
+  <name>usr/lib/fm/libfmd_agent.so.1</name>
+  <!-- <name>usr/lib/fm/libfmd_zfs.so.1</name> -->
+  <name>usr/lib/libipmi.so.1</name>
+  <name>usr/lib/amd64/libipmi.so.1</name>
+  <name>usr/lib/libcurl.so.4</name>
+  <name>usr/lib/libcurl.so.4.3.0</name>
+  <name>usr/lib/libgss.so.1</name>
+  <!-- <name>usr/lib/liblldp.so.1</name -->
+  <name>usr/lib/libpkcs11.so.1</name>
+  <name>usr/lib/amd64/libpkcs11.so.1</name>
+  <name>usr/lib/fm/topo/plugins/fac_prov_ipmi.so</name>
+  <name>usr/lib/fm/topo/plugins/disk.so</name>
+  <!-- <name>usr/lib/fm/topo/plugins/usb.so</name> -->
+  <name>usr/lib/fm/topo/plugins/xfp.so</name>
+  <!-- <name>usr/lib/fm/topo/plugins/bay.so</name> -->
+  <name>usr/lib/fm/topo/plugins/ses.so</name>
+  <name>usr/lib/fm/topo/plugins/ipmi.so</name>
+  <name>usr/lib/fm/topo/maps/xfp-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/plugins/x86pi.so</name>
+  <name>usr/platform/i86pc/lib/fm/topo/plugins/pcibus.so</name>
+  <name>usr/platform/i86pc/lib/fm/topo/plugins/chip.so</name>
+  <name>usr/platform/i86pc/lib/fm/topo/plugins/hostbridge.so</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/i86pc-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/i86pc-legacy-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/chassis-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4600-M2-disk-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/chip-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4500-disk-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/Netra-X4200-M2-disk-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4200-Server-disk-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/psu-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/fan-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4200-M2-disk-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/SUN-FIRE-X4270-M2-SERVER-disk-hc-topology.xml</name>
+  <name>usr/platform/i86pc/lib/fm/topo/maps/Sun-Fire-X4540-disk-hc-topology.xml</name>
+  <name>usr/share/lib/xml/dtd/topology.dtd.1</name>
+  <!-- <name>var/fm/fmd/topo</name> -->
+  <!-- libraries needed by the /usr/bin/su command -->
+  <name>usr/bin/su</name>
+  <name>usr/lib/libproject.so.1</name>
+  <name>usr/lib/security/pam_authtok_get.so.1</name>
+  <name>usr/lib/security/pam_dhkeys.so.1</name>
+  <name>usr/lib/security/pam_unix_cred.so.1</name>
+  <name>usr/lib/security/pam_unix_auth.so.1</name>
+  <name>usr/lib/security/pam_dial_auth.so.1</name>
+</software_data>

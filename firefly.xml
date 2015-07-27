@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dc SYSTEM "/usr/share/install/dc.dtd.1">
+<!--
+  CDDL HEADER START
+
+  The contents of this file are subject to the terms of the
+  Common Development and Distribution License (the "License").
+  You may not use this file except in compliance with the License.
+
+  You can obtain a copy of the license at usr/src/OPENSOLARIS.LICENSE
+  or http://www.opensolaris.org/os/licensing.
+  See the License for the specific language governing permissions
+  and limitations under the License.
+
+  When distributing Covered Code, include this CDDL HEADER in each
+  file and include the License file at usr/src/OPENSOLARIS.LICENSE.
+  If applicable, add the following below this CDDL HEADER, with the
+  fields enclosed by brackets "[]" replaced with your own identifying
+  information: Portions Copyright [yyyy] [name of copyright owner]
+
+  CDDL HEADER END
+
+  Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
+  Copyright 2012, OmniTI Computer Consulting, Inc. All rights reserved.
+  Copyright 2015, Nexenta Systems, Inc. All rights reserved.
+		
+  XML specification for building an firefly iso image
+-->
+<dc>
+  <!--
+    add_timestamp controls if the iso/usb should
+    have a timestamp appended to it. Useful if the intent
+    is to do serial builds and to keep all the incremental
+    images around
+  -->
+  <distro name="firefly" add_timestamp="false">
+  <!-- Uncomment if http_proxy needs to be set
+  <distro name="firefly" add_timestamp="false"
+      http_proxy="http://example.com">
+  -->
+    <distro_spec>
+      <img_params>
+        <media_im>
+          <!--
+            Boot menu modifications to be applied to the image.
+
+            Optional attributes that can be specified here are:
+            title   - title for the specialized boot entry
+                      Default is to use the first line of /etc/release
+
+            timeout - boot loader timeout value before the default boot entry
+                      is automatically activated.
+          -->
+          <boot_mods title="firefly" timeout="5">
+            <!--
+              Boot entries to add to the default boot menu in the image. Each
+              entry is either prepended or appended sequentially to the boot
+              menu in order of listing based on each boot entry element's
+              "insert_at" attribute value ("start" or "end").
+
+              Optional attributes:
+              default_entry - If the boot_entry has this attribute set to
+                              "true" then it will be the default boot entry
+                              activated by the boot loader.
+                              Note that if more than one boot entry has this
+                              attribute set to "true", the last entry defined
+                              as such will override preceeding default
+                              boot_entry elements set to "true".
+
+              insert_at     - Optional attribute indicating the desired
+                              insertion point relative to the existing list of
+                              boot entries.
+                              Valid values are "start" or "end" only. If
+                              omitted the default action is to append the entry
+                              to the end of the list.
+
+              Required sub-elements:
+              title_suffix  - Text string appended to this specific entry's
+                              title.
+
+              Optional sub-elements:
+              kernel_args   - Optional kernel arguments passed to the kernel by
+                              the boot loader.
+            -->
+            <!-- <boot_entry default_entry="true" insert_at="end">
+              <title_suffix>firefly failsafe</title_suffix>
+              <kernel_args></kernel_args> 
+            </boot_entry> -->
+          </boot_mods>
+        </media_im>
+      </img_params>
+    </distro_spec>
+    <!--
+      Target Section: defines zfs build dataset to be used for the build.
+      Filesystem name should not include the name of the zpool.
+    -->
+    <target name="desired">
+      <logical>
+        <zpool name="rpool" action="use_existing">
+          <filesystem name="dc/text" action="preserve"/>
+        </zpool>
+      </logical>
+    </target>
+
+    <!--
+      Software section: defines the payload for the transfer checkpoints.
+    -->
+    <!--
+      Sofware node names should match a corresponding Execution node
+      checkpoint name.
+
+      The values of '{PKG_IMAGE_PATH}' and '{BOOT_ARCHIVE}' are replaced by
+      distro_const during execution with <ZFS Dataset>/build_data/pkg_image and
+      <ZFS Dataset>/build_data/boot_archive, respectively.
+    -->
+    <software name="transfer-ips-install" type="IPS">
+      <destination>
+        <xi:include xmlns:xi="http://www.w3.org/2003/XInclude"
+            href="/usr/share/distro_const/lang_facets.xml"/>
+      </destination>
+      <source>
+        <publisher name="omnios">
+          <origin name="http://pkg.omniti.com/omnios/r151014/"/>
+          <!-- 
+            If mirrors for this publisher are desired, they can be set here
+          -->
+          <!-- Uncomment before using
+          <mirror name="mirror.example.com"></mirror>
+          -->
+        </publisher>
+ 
+       <!--
+          If additional publishers need to be set, they can be set here
+        -->
+        <!-- Uncomment before using
+        <publisher name="solaris">
+          <origin name="http://example.com"></origin>
+          <mirror name="mirror1.example.com"></mirror>
+          <mirror name="mirror2.example.com"></mirror>
+        </publisher>
+        -->
+      </source>
+      <!--
+        List of packages used to form the installed image
+         
+        By default the latest build available in the specified
+
+        the build number has to be appended to the 'entire' package
+        in the following form:
+
+        <name>pkg:/entire@0.5.11-0.build#</name>
+      -->
+      <software_data action="install">
+        <name>pkg:/entire@latest</name>
+        <name>pkg:/system/install/text-install@latest</name>
+        <name>pkg:/system/library/install@latest</name> 
+        <name>pkg:/system/install/media/internal@latest</name>
+	<name>pkg:/system/install/configuration@latest</name> 
+	<name>pkg:/system/install@latest</name>
+	<name>pkg:/service/storage/media-volume-manager</name> 
+	</software_data>
+    </software>
+    <!--
+      The default publisher to be set on the system after it has been installed.
+    -->
+    <software name="set-ips-attributes" type="IPS">
+      <destination>
+        <image img_root="{PKG_IMAGE_PATH}" action="use_existing"/>
+      </destination>
+      <source>
+        <publisher name="omnios">
+          <origin name="http://pkg.omniti.com"/>
+         <!-- 
+            If mirrors for this publisher are desired, they can be set here
+          
+           Uncomment before using
+          <mirror name="mirror.example.com"></mirror>
+         --> 
+        </publisher> 
+	<!-- <publisher name="nef">
+          <origin name="http://80.252.84.124:10000"/> -->
+          <!-- 
+            If mirrors for this publisher are desired, they can be set here
+          
+          Uncomment before using
+          <mirror name="mirror.example.com"></mirror>
+         
+        </publisher> -->
+      </source>
+    </software>
+    <!--
+      Items below this line are rarely configured
+    -->
+    <!--
+      This section defines the contents of the boot_archive
+    -->
+    <software name="ba-init" type="CPIO">
+      <destination>
+        <dir path="{BOOT_ARCHIVE}"/>
+      </destination>
+      <source>
+        <dir path="{PKG_IMAGE_PATH}"/>
+      </source>
+      <xi:include xmlns:xi="http://www.w3.org/2003/XInclude"
+          href="/opt/firefly/distr/firefly_boot_archive_contents_x86.xml"/>
+      <software_data action="install">
+        <name>kernel</name>
+        <name>boot</name>
+        <name>platform</name>
+        <name>system</name>
+        <name>lib</name>
+        <name>dev</name>
+        <name>devices</name>
+        <name>usr/lib/devfsadm/linkmod</name>
+        <name>root</name>
+        <name>jack</name>
+        <name>sbin/ibd_delete_link</name>
+        <name>sbin/ibd_upgrade</name>
+        <name>var/svc/manifest</name>
+        <name>var/svc/profile</name>
+        <name>var/sadm</name>
+        <name>etc</name>
+      </software_data>
+      <software_data action="uninstall">
+        <name>etc/gconf</name>
+        <name>etc/brltty</name>
+        <name>etc/gtk-2.0</name>
+        <name>etc/notices</name>
+        <name>var/sadm/pkg</name>
+      </software_data>
+    </software>
+    <!--
+      Execution section: This section lists the checkpoints that are run to
+      create an image. The checkpoints listed below are run in order.
+    -->
+    <execution stop_on_error="true">
+      <checkpoint name="transfer-ips-install"
+          desc="Transfer pkg contents from IPS"
+          mod_path="solaris_install/transfer/ips"
+          checkpoint_class="TransferIPS">
+          <kwargs>
+            <arg name="show_stdout">true</arg>
+          </kwargs>
+      </checkpoint>
+      <checkpoint name="set-ips-attributes"
+          desc="Set post-install IPS attributes"
+          mod_path="solaris_install/transfer/ips"
+          checkpoint_class="TransferIPS"/>
+      <checkpoint name="pre-pkg-img-mod"
+          desc="Pre package image modification"
+          mod_path="solaris_install/distro_const/checkpoints/pre_pkg_img_mod"
+          checkpoint_class="TextPrePkgImgMod">
+          <!--
+            root user/role password in the image.
+          -->
+          <!--
+            The default hostname for images is 'solaris'.  Setting
+            the hostname here will override the default.
+          -->
+          <kwargs>
+            <arg name="root_password"></arg>
+            <arg name="is_plaintext">true</arg>
+            <!-- uncomment before using -->
+            <arg name="hostname">firefly</arg>
+            
+          </kwargs>
+      </checkpoint>
+      <checkpoint name="ba-init"
+          desc="Boot Archive Initialization"
+          mod_path="solaris_install/transfer/cpio"
+          checkpoint_class="TransferCPIO"/>
+      <checkpoint name="ba-config"
+          desc="Boot Archive Configuration"
+          mod_path="solaris_install/distro_const/checkpoints/firefly_boot_archive_configure"
+          checkpoint_class="TextBootArchiveConfigure">
+      </checkpoint>
+      <checkpoint name="ba-arch"
+          desc="Boot Archive Archival"
+          mod_path="solaris_install/distro_const/checkpoints/boot_archive_archive"
+          checkpoint_class="BootArchiveArchive">
+          <!--
+            compression_type/compression_level to be used in compressing the
+            boot_archive. Valid types are gzip and none.
+
+            size_pad increases the amount of free space in the boot_archive
+            at the expense of available memory on the booted system.
+
+            bytes_per_inode is used to control the 'nbpi' used in sizing up the
+            boot_archive
+          -->
+          <kwargs>
+            <arg name="compression_type">gzip</arg>
+            <arg name="compression_level">9</arg>
+            <arg name="size_pad">0</arg>
+            <arg name="bytes_per_inode">0</arg>
+          </kwargs>
+      </checkpoint>
+      <checkpoint name="boot-setup"
+          desc="Setup boot menu"
+          mod_path="solaris_install/boot/boot"
+          checkpoint_class="TextISOImageBootMenu"/>
+      <checkpoint name="pkg-img-mod"
+          desc="Pkg image area modification"
+          mod_path="solaris_install/distro_const/checkpoints/firefly_pkg_img_mod"
+          checkpoint_class="TextPkgImgMod">
+          <!--
+            compression_type controls the compression algorithm to be used in
+            compressing solaris.zlib and solarismisc.zlib. Valid values are gzip
+            and lzma
+          -->
+          <kwargs>
+            <arg name="dist_iso_sort">
+                /usr/share/distro_const/sort/text_x86.sort</arg>
+            <arg name="compression_type">lzma</arg>
+          </kwargs>
+      </checkpoint>
+      <checkpoint name="create-iso"
+          desc="ISO media creation"
+          mod_path="solaris_install/distro_const/checkpoints/create_iso"
+          checkpoint_class="CreateISO">
+      </checkpoint>
+      <!-- <checkpoint name="create-usb"
+          desc="USB media creation"
+          mod_path="solaris_install/distro_const/checkpoints/create_usb"
+          checkpoint_class="CreateUSB">
+      </checkpoint> -->
+    </execution>
+
+    <!--
+      SMF service profiles to be applied to the boot_archive.
+    
+      These profiles are applied in the order they are specified.
+    -->
+    <configuration name="pre-pkg-img-mod" type="sysconf"
+         source="/etc/svc/profile/generic_limited_net.xml">
+      <validation path="/usr/sbin/svccfg" args="apply -n"/>
+    </configuration>
+    <configuration name="pre-pkg-img-mod" type="sysconf"
+        source="/usr/share/distro_const/profile/generic.xml">
+      <validation path="/usr/sbin/svccfg" args="apply -n"/>
+    </configuration>
+    <configuration name="pre-pkg-img-mod" type="sysconf"
+        source="/usr/share/distro_const/profile/text.xml">
+      <validation path="/usr/sbin/svccfg" args="apply -n"/>
+    </configuration>
+    <configuration name="pre-pkg-img-mod" type="sysconf"
+        source="/etc/svc/profile/ns_files.xml">
+      <validation path="/usr/sbin/svccfg" args="apply -n"/>
+    </configuration> 
+  </distro>
+</dc>

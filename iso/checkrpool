@@ -1,0 +1,49 @@
+#!/bin/ksh
+
+# Discover and mount root pool to /a
+# Copyright 2015 Nexenta Systems, Inc. All rights reserved.
+
+rpool_mount()
+{
+    pool=$1
+    id=$2
+
+    echo "Mounting pool:$pool with guid:$id to /a"
+    zpool import -f -N -R /a $id > /dev/null 2>&1
+    zpool list $pool > /dev/null 2>&1
+    [[ $? == 0 ]] || ( echo "Can't import $pool" && return )
+    bootfs=$(zpool get bootfs $pool | grep bootfs | nawk '{ print $3 }')
+    echo "Mounting $bootfs to /a"
+    zfs mount $bootfs
+    [[ $? == 0 ]] || ( echo "Can't mount $bootfs" && return )
+
+}
+
+poolnum=0
+pools=
+
+rootpool > /tmp/rootpool 2>&1
+
+cat /tmp/rootpool | while read line ; do
+if  echo $line | egrep "^[a-zA-Z0-9_.-]+;.*" >/dev/null; then
+    poolnum=`expr $poolnum + 1`
+    name=$(echo $line | nawk '{ split ($0,a,";"); print a[1] }')
+    id=$(echo $line | nawk '{ split ($0,a,";"); print a[2] }')
+    pools="$pools $name:$id"
+fi
+done
+
+if [ "$poolnum" -eq 0 ]; then
+    echo "No operating system found, exiting to shell"
+elif [ "$poolnum" -eq 1 ]; then
+    name=$(echo ${pools%%:*})
+    id=$(echo ${pools##*:})
+    echo "Found installed operating system at pool:$name"
+    rpool_mount $name $id
+else
+    echo "Found multiple operating system instances:"
+    choice=$(ckitem -p "To select which root pool to import, enter a number" ${pools[*]})
+    name=$(echo ${choice%%:*})
+    id=$(echo ${choice##*:})
+    rpool_mount $name $id
+fi
