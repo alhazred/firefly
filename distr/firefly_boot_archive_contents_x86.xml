@@ -21,7 +21,7 @@
  
   Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
 
-  XML specification for building an NexentaOS installer iso image
+  XML specification for building a Firefly image
 -->
 <software_data action="install">
   <name>sbin</name>
@@ -45,6 +45,8 @@
   <name>usr/sbin/autopush</name>
   <name>usr/sbin/beadm</name>
   <name>usr/sbin/pmadm</name>
+  <name>usr/sbin/format</name>
+  <name>usr/sbin/fdisk</name>
   <name>sbin/biosdev</name>
   <name>usr/sbin/bootadm</name>
   <name>usr/sbin/cryptoadm</name>
@@ -111,11 +113,12 @@
   <name>usr/lib/libxml2.so</name>
   <name>usr/lib/libxml2.so.2</name>
   <name>usr/lib/libxml2.so.2.9.1</name>
+  <name>usr/lib/libdiskmgt.so.1</name> 
   <name>usr/lib/libz.so.1.2.8</name>
   <name>usr/lib/libipsecutil.so.1</name>
   <name>usr/lib/libHBAAPI.so.1</name>
   <name>usr/lib/libfcoe.so.1</name>
-<name>usr/lib/amd64/libsaveargs.so.1</name>
+  <name>usr/lib/amd64/libsaveargs.so.1</name>
   <name>usr/lib/libsmbios.so.1</name>
   <name>usr/lib/libtecla.so.1</name>
   <name>usr/lib/libl.so.1</name>

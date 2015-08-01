@@ -191,98 +191,6 @@ class PkgImgMod(Checkpoint):
         os.symlink(os.path.join("..", "platform"),
                    os.path.join(self.pkg_img_path, "boot/platform"))
 
-    def create_usr_archive(self):
-        """ class method to create the /usr file system archive
-        """
-        os.chdir(self.pkg_img_path)
-
-        # Generate the /usr file system archive.
-        self.logger.info("Generating /usr file system archive")
-
-        cmd = [cli.MKISOFS, "-o", "solaris.zlib", "-quiet", "-N",
-               "-l", "-R", "-U", "-allow-multidot", "-no-iso-translate",
-               "-cache-inodes", "-d", "-D", "-V", "\"compress\"", "usr"]
-
-        # Use the iso_sort file if one is specified
-        if self.dist_iso_sort is not None and \
-           os.path.exists(self.dist_iso_sort):
-            # insert the flags directly after the name of the output file
-            cmd.insert(3, "-sort")
-            cmd.insert(4, self.dist_iso_sort)
-        run(cmd)
-
-        self.logger.info("Compressing /usr file system archive using: " +
-                         self.compression_type)
-
-        cmd = [cli.LOFIADM, "-C", self.compression_type,
-               os.path.join(self.pkg_img_path, "solaris.zlib")]
-        try:
-            p = run(cmd)
-        except CalledProcessError:
-            raise RuntimeError("Compression of /usr file system failed: " +
-                               os.strerror(p.returncode))
-
-    def create_misc_archive(self):
-        """ class method to create the /mnt/misc file system archive
-        """
-        os.chdir(self.pkg_img_path)
-
-        self.logger.info("Generating /mnt/misc file system archive")
-
-        os.mkdir("miscdirs")
-        shutil.move("opt", "miscdirs")
-        shutil.move("etc", "miscdirs")
-        shutil.move("var", "miscdirs")
-
-        # add Software node to install items from /mnt/misc
-
-        src_path = Dir("/mnt/misc")
-        src = Source()
-        src.insert_children(src_path)
-
-        dst_path = Dir(INSTALL_TARGET_VAR)
-        dst = Destination()
-        dst.insert_children(dst_path)
-
-        tr_install_misc = CPIOSpec()
-        tr_install_misc.action = CPIOSpec.INSTALL
-        tr_install_misc.contents = ["."]
-        tr_install_misc.size = str(dir_size(os.path.join(self.pkg_img_path,
-                                                         "miscdirs")))
-
-        misc_software_node = Software(TRANSFER_MISC, type="CPIO")
-        misc_software_node.insert_children([src, dst, tr_install_misc])
-        self.doc.persistent.insert_children(misc_software_node)
-
-        cmd = [cli.MKISOFS, "-o", "solarismisc.zlib", "-N", "-l", "-R",
-               "-U", "-allow-multidot", "-no-iso-translate", "-quiet",
-               "-cache-inodes", "-d", "-D", "-V", "\"compress\"",
-               "miscdirs"]
-        run(cmd)
-
-        self.logger.info("Compressing /mnt/misc file system archive " +
-                         "using: " + self.compression_type)
-
-        cmd = [cli.LOFIADM, "-C", self.compression_type,
-               os.path.join(self.pkg_img_path, "solarismisc.zlib")]
-        p = run(cmd, check_result=Popen.ANY)
-        if p.returncode != 0:
-            if "invalid algorithm name" in p.stderr:
-                raise RuntimeError("Invalid compression algorithm " +
-                    "specified for /mnt/misc archive: " +
-                    self.compression_type)
-            else:
-                raise RuntimeError("Compression of /mnt/misc file system " +
-                                   "failed:  " + os.strerror(p.returncode))
-
-        # the removal of /usr must be deferred to until solarismisc.zlib has
-        # been created because the contents of solarismisc.zlib actually come
-        # from /usr
-        shutil.rmtree(os.path.join(self.pkg_img_path, "miscdirs"),
-                      ignore_errors=True)
-        shutil.rmtree(os.path.join(self.pkg_img_path, "usr"),
-                      ignore_errors=True)
-
     def add_content_list_to_doc(self, content_list):
         src_path = Dir(MEDIA_DIR_VAR)
         src = Source()
@@ -369,73 +277,6 @@ class PkgImgMod(Checkpoint):
         # clean up the root of the package image path
         self.strip_root()
 
-        # create the /usr archive
-        #self.create_usr_archive()
-
-        # create the /mnt/misc archive
-        #self.create_misc_archive()
-
-
-class LiveCDPkgImgMod(PkgImgMod, Checkpoint):
-    """ LiveCDPkgImgMod - class to modify the pkg_image directory after the
-    boot archive is built for Live CD distributions
-    """
-
-    DEFAULT_ARG = {"compression_type": "gzip"}
-
-    def __init__(self, name, arg=DEFAULT_ARG):
-        super(LiveCDPkgImgMod, self).__init__(name, arg)
-
-    def cleanup_icons(self):
-        """ class method to remove all icon-theme.cache files
-        """
-        self.logger.debug("Cleaning out icon theme cache")
-
-        os.chdir(os.path.join(self.pkg_img_path, "usr"))
-        for root, _none, files in os.walk("."):
-            if "icon-theme.cache" in files:
-                os.unlink(os.path.join(root, "icon-theme.cache"))
-
-    def strip_platform(self):
-        """ class method to remove every file from platform/ except for the
-        kernel and boot_archive.
-        """
-        self.logger.debug("platform only needs to contain the kernel " +
-                          "and boot_archive")
-
-        os.chdir(os.path.join(self.pkg_img_path, "platform"))
-        for root, _none, files in os.walk("."):
-            for f in files:
-                if f == "unix" or f == "boot_archive":
-                    continue
-                os.unlink(os.path.join(root, f))
-
-    def execute(self, dry_run=False):
-        """Customize the pkg_image area. Assumes that a populated pkg_image
-           area exists and that the boot_archive has been built
-        """
-        self.logger.info("=== Executing Pkg Image Modification Checkpoint ===")
-
-        self.parse_doc()
-
-        # remove icon caches
-        self.cleanup_icons()
-
-        # clean up the root of the package image path
-        self.strip_root()
-
-        # create the /usr archive
-        #self.create_usr_archive()
-
-        # create the /mnt/misc archive
-        #self.create_misc_archive()
-
-        # strip the /platform directory
-        self.strip_platform()
-
-        # populate live cd's content into DOC
-        self.populate_livecd_content()
-
 
 class TextPkgImgMod(PkgImgMod, Checkpoint):
     """ TextPkgImgMod - class to modify the pkg_image directory after the boot
@@ -458,12 +299,6 @@ class TextPkgImgMod(PkgImgMod, Checkpoint):
         # clean up the root of the package image path
         self.strip_root()
 
-        # create the /usr archive
-        #elf.create_usr_archive()
-
-        # create the /mnt/misc archive
-        #self.create_misc_archive()
-
         # get the platform of the system
         arch = platform.processor()
 
@@ -483,49 +318,3 @@ class TextPkgImgMod(PkgImgMod, Checkpoint):
             # return to the initial directory
             os.chdir(cwd)
 
-
-class AIPkgImgMod(TextPkgImgMod):
-    """ AIPkgImgMod - class to modify the pkg_image directory after the boot
-    archive is built for AI distributions
-    """
-
-    DEFAULT_ARG = {"compression_type": "gzip"}
-
-    def __init__(self, name, arg=DEFAULT_ARG):
-        super(AIPkgImgMod, self).__init__(name, arg)
-
-    def execute(self, dry_run=False):
-        """ Customize the pkg_image area. Assumes that a populated pkg_image
-        area exists and that the boot_archive has been built
-        """
-        self.logger.info("=== Executing Pkg Image Modification Checkpoint ===")
-
-        self.parse_doc()
-
-        # clean up the root of the package image path
-        self.strip_root()
-
-        # create the /usr archive
-        self.create_usr_archive()
-
-        # create the /mnt/misc archive
-        self.create_misc_archive()
-
-        # get the platform of the system
-        arch = platform.processor()
-
-        # save the current working directory
-        cwd = os.getcwd()
-        try:
-            # clean up the package image path based on the platform
-            if arch == "i386":
-                self.strip_x86_platform()
-            else:
-                self.strip_sparc_platform()
-
-            # populate the value from the save directory into the DOC
-            self.populate_save_list()
-
-        finally:
-            # return to the initial directory
-            os.chdir(cwd)
