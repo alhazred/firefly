@@ -10,7 +10,7 @@ TERMINFO=/usr/share/lib/terminfo
 EDITOR=vi
 SHELL=bash
 PAGER='/usr/bin/less -ins'
-PS1="\e[0;32m[\u@\h]>\e[m"
+PS1="\e[0;32m\u@\h# \e[m"
 
 export TERM USER HOME PATH TERMINFO EDITOR SHELL PAGER PS1
 

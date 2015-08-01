@@ -22,7 +22,7 @@
 
 #
 # Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
-#
+# Copyright 2015 Nexenta Systems, Inc. All rights reserved.
 
 """ pkg_img_mod
 

@@ -22,7 +22,7 @@
 
 #
 # Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
-#
+# Copyright 2015 Nexenta Systems, Inc. All rights reserved.
 
 """ boot_archive_configure - configure a populated boot archive area into a
 usable boot archive.
@@ -171,6 +171,7 @@ class BootArchiveConfigure(Checkpoint):
 	shutil.copy2("/opt/firefly/iso/smf/manifest-import", self.ba_build + "/lib/svc/method/")
 	shutil.copy2("/opt/firefly/iso/rootpool", self.ba_build + "/usr/sbin/")	
 	shutil.copy2("/opt/firefly/iso/sulogin", self.ba_build + "/etc/default/")
+	shutil.copy2(self.pkg_img_path + "/usr/xpg4/bin/vi", self.ba_build + "/usr/bin/")
 	shutil.copytree(self.pkg_img_path + "/usr/share/lib/keytables", self.ba_build + "/usr/share/lib/keytables")
 	shutil.copytree(self.pkg_img_path + "/usr/share/lib/terminfo", self.ba_build + "/usr/share/lib/terminfo")	
 	os.chdir(self.ba_build + "/sbin")		

@@ -20,8 +20,8 @@
   CDDL HEADER END
  
   Copyright (c) 2010, 2011, Oracle and/or its affiliates. All rights reserved.
-
-  XML specification for building a Firefly image
+  Copyright 2015 Nexenta Systems, Inc. All rights reserved.
+  XML specification for building a Firefly failsafe image
 -->
 <software_data action="install">
   <name>sbin</name>
@@ -162,7 +162,6 @@
   <name>usr/bin/test</name>
   <name>usr/bin/sleep</name>
   <name>usr/bin/expr</name>
-  <name>usr/bin/vi</name>
   <name>usr/bin/wget</name>
   <name>usr/lib/fs/hsfs/fstyp</name>
   <name>usr/lib/fs/hsfs/fstyp.so.1</name>
